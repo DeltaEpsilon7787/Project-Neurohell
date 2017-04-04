@@ -11,6 +11,7 @@ from neural_network import meta_functions
 
 from time import localtime
 from itertools import repeat
+from collections import deque
 
 
 def isolate_weights(network):
@@ -23,19 +24,19 @@ def isolate_weights(network):
 
 
 def merge_weights(original_network, new_weights):
-    network_spread = [0]
-    network_shapes = []
+    network_spread = deque((0,))
+    network_shapes = deque()
     for layer in original_network:
         network_spread.append(layer.shape[0]*layer.shape[1])
         network_shapes.append(layer.shape)
     network_spread = np.array(network_spread).cumsum()
     network_spread = zip(network_spread[:-1], network_spread[1:])
     new_network_data = zip(network_spread, network_shapes)
-    new_network = []
+    new_network = deque()
     for data in new_network_data:
         spread, shape = data
         new_network.append(new_weights[spread[0]:spread[1]].reshape(shape).copy())
-    return new_network
+    return list(new_network)
 
 
 @nb.jit(nogil=True, cache=True)
@@ -53,10 +54,10 @@ def obtain_interval(data_set, data_thru, use_gpu=False):
 
 @nb.jit(nogil=True, cache=True)
 def _obtain_interval_set_(data_in, data_thru, use_gpu=False):
-    interval_set = []
+    interval_set = deque()
     for data in data_in:
         interval_set.append(obtain_interval(data, data_thru, use_gpu=use_gpu))
-    return interval_set
+    return list(interval_set)
 
 
 @nb.jit(nogil=True, cache=True)
@@ -133,7 +134,7 @@ def _intersection_coeff_(interval_a, interval_b):
 
     full_len = intersection[1] - intersection[0]
     return (full_len / least_len
-            if not additional_error or least_len == 0
+            if not (additional_error > 0 or least_len == 0)
             else additional_error)
 
 

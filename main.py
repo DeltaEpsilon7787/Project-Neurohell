@@ -21,6 +21,7 @@ if __name__ == "__main__":
                 dtype=np.float64
                 ).transpose()
 
+    marked_data = []
     data = []
 
     for directory in os.listdir('training_data')[:]:
@@ -36,26 +37,29 @@ if __name__ == "__main__":
                     )
         new_data = np.array(new_data)
         data.append(new_data)
+        marked_data.append((directory, new_data))
 
     data = np.array(data, dtype=np.float64)
 
 #    some_net = (
-#            neural_network.meta_functions.create_layer(5, SIZE[0]*SIZE[1], 1)+
-#            neural_network.meta_functions.create_layer(10, 5)+
-#            neural_network.meta_functions.create_layer(15, 10)
+#            neural_network.meta_functions.create_layer(50, SIZE[0]*SIZE[1], 1)
 #            )
 
     some_net = neural_network.meta_functions.load_network("progress/BEST.neuro")
     net1 = \
     neural_network.training.train_with_random_step(data,
                                                    some_net,
+                                                   guaranteed_epochs=20,
                                                    delta=0.01,
                                                    diminishing_return_cutoff=0.0005,
                                                    lock=RLock())
 
+    net2 = \
     neural_network.training.train_with_gradient_descent(data,
-                                                        some_net,
+                                                        net1,
                                                         epochs=15,
                                                         utilize_multiprocessing=True,
                                                         lock=RLock(),
                                                         use_n_processes=os.cpu_count())
+
+    alpha = neural_network.meta_functions.get_mapping_function(marked_data, net1)

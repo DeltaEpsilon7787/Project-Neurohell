@@ -7,7 +7,8 @@ from neural_network import utility
 __all__ = ["create_layer",
            "pass_data",
            "save_network",
-           "load_network"]
+           "load_network",
+           "get_mapping_function"]
 
 
 def create_layer(layer_size, input_size, weight_range=10):
@@ -32,6 +33,25 @@ def pass_data(data_in, data_thru, use_gpu=False):
         current_data = utility.enter_data(current_data, layer, use_gpu)
     return current_data
 
+
+def get_mapping_function(marked_data, trained_network):
+    data_output = {}
+    for marker, data_set in marked_data:
+        interval = utility.obtain_interval(data_set, trained_network)
+        data_output[interval] = marker
+
+    def mapping(data_in):
+        hits = []
+        value = pass_data(data_in, trained_network).sum()
+        for interval in data_output:
+            if interval[0] <= value and value <= interval[1]:
+                avg = abs((sum(interval) / 2)-value)
+                hits.append((data_output[interval], avg))
+        if len(hits):
+            return min(hits, key=lambda key: key[1])[0]
+        return None
+
+    return mapping
 
 def save_network(network, path='network.neuro', lock=None):
     """
