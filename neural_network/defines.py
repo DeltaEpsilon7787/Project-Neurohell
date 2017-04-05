@@ -12,7 +12,7 @@ import numba as nb
 from neural_network import utility
 
 INTERSECTION_COEFF = 2
-CRITICAL_ERROR = 0.1
+CRITICAL_ERROR = 0.001
 
 
 @jit(nopython=True, nogil=True, cache=True)

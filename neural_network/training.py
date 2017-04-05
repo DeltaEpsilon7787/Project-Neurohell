@@ -115,6 +115,7 @@ def train_with_gradient_descent(data_in,
                                 use_n_processes=4,
                                 save_intermediates="progress/Gradient Descent Training.neuro",
                                 save_best="progress/BEST.neuro",
+                                train_log="logs/train.log",
                                 lock=None):
 
     if logging_level > logging.NONE:
@@ -127,6 +128,7 @@ def train_with_gradient_descent(data_in,
                     diminishing_return_cutoff,
                     save_intermediates,
                     save_best,
+                    filename=train_log,
                     lock=lock)
 
     meta_functions.save_network(data_thru, save_intermediates, lock=lock)
@@ -204,6 +206,7 @@ def train_with_gradient_descent(data_in,
             if logging_level >= logging.BASIC:
                 logging.log("Satisfactory Limit Reached",
                             best_loss,
+                            filename=train_log,
                             lock=lock)
             break
 
@@ -215,6 +218,7 @@ def train_with_gradient_descent(data_in,
             if logging_level >= logging.BASIC:
                 logging.log("Diminishing Return",
                             delta_loss,
+                            filename=train_log,
                             lock=lock)
             break
 
@@ -223,11 +227,13 @@ def train_with_gradient_descent(data_in,
                         epoch,
                         best_loss,
                         delta_loss,
+                        filename=train_log,
                         lock=lock)
 
     if logging_level >= logging.SUPERFICIAL:
         logging.log("Progress Saved",
                     save_best,
+                    filename=train_log,
                     lock=lock)
 
     meta_functions.save_network(best_network, save_best, lock=lock)
@@ -249,6 +255,7 @@ def train_with_random_step(data_in,
                            bulk_report=0.05,
                            save_intermediates="progress/Random Training.neuro",
                            save_best="progress/BEST.neuro",
+                           train_log="logs/train.log",
                            lock=None):
     if logging_level > logging.NONE:
         logging.log("Random Training Start",
@@ -260,6 +267,7 @@ def train_with_random_step(data_in,
                     guaranteed_epochs,
                     save_intermediates,
                     save_best,
+                    filename=train_log,
                     lock=lock)
 
     meta_functions.save_network(data_thru,
@@ -320,6 +328,7 @@ def train_with_random_step(data_in,
         if best_loss < satisfactory_error:
             logging.log("Satisfactory Limit Reached",
                         best_loss,
+                        filename=train_log,
                         lock=lock)
             break
 
@@ -332,6 +341,7 @@ def train_with_random_step(data_in,
             if delta_loss_rate < diminishing_return_cutoff:
                 logging.log("Diminishing Return",
                             delta_loss_rate,
+                            filename=train_log,
                             lock=lock)
                 break
 
@@ -340,12 +350,14 @@ def train_with_random_step(data_in,
                         current_epoch,
                         best_loss,
                         cum_delta_loss,
+                        filename=train_log,
                         lock=lock)
             cum_delta_loss = 0.0
         continue
 
     logging.log("Progress Saved",
                 save_best,
+                filename=train_log,
                 lock=lock)
     meta_functions.save_network(best_network,
                                 save_best,

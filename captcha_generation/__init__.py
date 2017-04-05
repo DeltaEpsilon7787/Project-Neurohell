@@ -1,3 +1,1 @@
-__all__ = ["generation"]
-
-from . import generation
+from captcha_generation.generation import *

@@ -7,6 +7,7 @@ from random import choice
 from PIL import Image
 
 import neural_network
+import genetic_evolution
 
 if __name__ == "__main__":
     SIZE = (20, 30)
@@ -42,24 +43,28 @@ if __name__ == "__main__":
     data = np.array(data, dtype=np.float64)
 
 #    some_net = (
-#            neural_network.meta_functions.create_layer(50, SIZE[0]*SIZE[1], 1)
+#            neural_network.meta_functions.create_layer(10, SIZE[0]*SIZE[1], 10)+
+#            neural_network.meta_functions.create_layer(1, 10, 10)
 #            )
+#
+##    some_net = neural_network.meta_functions.load_network("progress/BEST.neuro")
+#    net1 = \
+#    neural_network.training.train_with_random_step(data,
+#                                                   some_net,
+#                                                   guaranteed_epochs=20,
+#                                                   delta=10,
+#                                                   diminishing_return_cutoff=0.0005,
+#                                                   lock=RLock())
+#
+#    net2 = \
+#    neural_network.training.train_with_gradient_descent(data,
+#                                                        net1,
+#                                                        delta=0.0001,
+#                                                        epochs=15,
+#                                                        utilize_multiprocessing=False,
+#                                                        lock=RLock(),
+#                                                        use_n_processes=os.cpu_count())
+#
+#    alpha = neural_network.meta_functions.get_mapping_function(marked_data, net1)
 
-    some_net = neural_network.meta_functions.load_network("progress/BEST.neuro")
-    net1 = \
-    neural_network.training.train_with_random_step(data,
-                                                   some_net,
-                                                   guaranteed_epochs=20,
-                                                   delta=0.01,
-                                                   diminishing_return_cutoff=0.0005,
-                                                   lock=RLock())
-
-    net2 = \
-    neural_network.training.train_with_gradient_descent(data,
-                                                        net1,
-                                                        epochs=15,
-                                                        utilize_multiprocessing=True,
-                                                        lock=RLock(),
-                                                        use_n_processes=os.cpu_count())
-
-    alpha = neural_network.meta_functions.get_mapping_function(marked_data, net1)
+    genetic_evolution.life.life(data, size=SIZE)

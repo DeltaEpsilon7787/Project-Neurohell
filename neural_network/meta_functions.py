@@ -30,7 +30,10 @@ def pass_data(data_in, data_thru, use_gpu=False):
     """
     current_data = data_in
     for layer in data_thru:
-        current_data = utility.enter_data(current_data, layer, use_gpu)
+        try:
+            current_data = utility.enter_data(current_data, layer, use_gpu)
+        except:
+            print(current_data, layer)
     return current_data
 
 

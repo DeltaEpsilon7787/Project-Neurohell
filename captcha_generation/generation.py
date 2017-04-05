@@ -8,14 +8,15 @@ from string import ascii_letters, digits
 from PIL import Image
 
 full_character_set = ascii_letters + digits
+__all__ = ["generate_training_data"]
 
 def generate_training_data(amount, font_directory, training_data_size = (32,32)):
     rmtree('./training_data', ignore_errors=True)
     for character in full_character_set:
         os.makedirs('./training_data/'+str(ord(character)))
-    
+
     fonts = os.listdir(font_directory)
-    
+
     for character in full_character_set:
         for i in range(amount):
             another_captcha = None

@@ -2,3 +2,4 @@
 progress
 training_data
 profiling.Result
+*/__pycache__

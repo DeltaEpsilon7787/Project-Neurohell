@@ -1,0 +1,8 @@
+delta=0.01
+multiplier=2
+satisfactory_error=0.01
+diminishing_return_cutoff=0.005
+guaranteed_epochs=20
+bulk_report=0.05
+save_intermediate_prefix=progress/life/intermediate/random_train_
+save_best_prefix=progress/life/best/random_train_

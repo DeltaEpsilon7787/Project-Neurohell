@@ -199,4 +199,16 @@ Seems like further training is pointless as last training session brought
 Delta-loss: {0:%}
                        """)
 
+    _create_logstring_("Life Log",
+                       ((int, float),
+                        (int, float),
+                        (int,),
+                        (int,)),
+                       """
+Generation {3} has just finished evolving.
+Previous fitness: {0}
+New fitness: {1}
+Networks to be trained: {2}
+                       """)
+
 _init_strings_()
